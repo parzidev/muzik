@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer /Applications/Xcode.app/Contents/Developer/usr/bin/simctl terminate booted com.sarkisozu.app)",
+      "Bash(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer /Applications/Xcode.app/Contents/Developer/usr/bin/simctl install booted \"/Users/parzi/Library/Developer/Xcode/DerivedData/SarkiSozu-hdonkcdhceoxohcnbkumpxjsqruz/Build/Products/Debug-iphonesimulator/SarkiSozu.app\")",
+      "Bash(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer /Applications/Xcode.app/Contents/Developer/usr/bin/simctl launch booted com.sarkisozu.app)"
+    ]
+  }
+}
