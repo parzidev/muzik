@@ -36,6 +36,57 @@ struct Song: Codable, Identifiable {
         }
         return Array(allChords).sorted()
     }
+
+    // MARK: - Difficulty
+
+    /// Automatic difficulty based on chord complexity
+    var difficulty: SongDifficulty {
+        let chordSet = chords
+        if chordSet.isEmpty { return .unknown }
+
+        let barreChords: Set<String> = ["F", "Fm", "F7", "Bm", "B", "B7", "Cm", "C#m", "F#m", "F#", "Gm", "G#m", "Bb", "Bbm", "Ab", "Eb", "D#m"]
+        let barreCount = chordSet.filter { barreChords.contains($0) }.count
+        let totalChords = chordSet.count
+        let hasSharpFlat = chordSet.contains { $0.contains("#") || $0.contains("b") }
+
+        if totalChords <= 3 && barreCount == 0 {
+            return .easy
+        } else if totalChords <= 5 && barreCount <= 1 {
+            return .medium
+        } else if barreCount >= 3 || totalChords >= 8 {
+            return .expert
+        } else {
+            return .hard
+        }
+    }
+}
+
+enum SongDifficulty: String, Codable {
+    case easy = "Kolay"
+    case medium = "Orta"
+    case hard = "Zor"
+    case expert = "Uzman"
+    case unknown = "?"
+
+    var color: String {
+        switch self {
+        case .easy: return "green"
+        case .medium: return "blue"
+        case .hard: return "orange"
+        case .expert: return "red"
+        case .unknown: return "gray"
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .easy: return "1.circle.fill"
+        case .medium: return "2.circle.fill"
+        case .hard: return "3.circle.fill"
+        case .expert: return "4.circle.fill"
+        case .unknown: return "questionmark.circle"
+        }
+    }
 }
 
 struct LyricsData: Codable {

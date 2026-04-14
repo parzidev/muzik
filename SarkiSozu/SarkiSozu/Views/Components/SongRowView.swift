@@ -39,6 +39,9 @@ struct SongRowView: View {
 
             Spacer()
 
+            // Difficulty indicator
+            difficultyDot(song.difficulty)
+
             // Display Key or First Chord
             if let ton = song.orjinal_ton, !ton.isEmpty {
                  keyBadge(text: ton)
@@ -51,6 +54,21 @@ struct SongRowView: View {
         .contentShape(Rectangle())
     }
     
+    private func difficultyDot(_ difficulty: SongDifficulty) -> some View {
+        let color: Color = {
+            switch difficulty {
+            case .easy: return .green
+            case .medium: return .blue
+            case .hard: return .orange
+            case .expert: return .red
+            case .unknown: return .gray
+            }
+        }()
+        return Circle()
+            .fill(color)
+            .frame(width: 8, height: 8)
+    }
+
     private func keyBadge(text: String) -> some View {
         Text(text)
             .font(.caption)

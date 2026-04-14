@@ -176,64 +176,89 @@ class SongDetailViewModel: ObservableObject {
     @Published var mode: DisplayMode = .lyricsAndChords
     @Published var isAutoScrolling: Bool = false
     @Published var scrollSpeed: Double = 3.0
-    
+    @Published var selectedChord: String? = nil
+
     enum DisplayMode: String, CaseIterable, Identifiable {
-        case lyricsAndChords = "Soz & Akor"
-        case cards = "Akor Kartlari"
+        case lyricsAndChords = "Söz & Akor"
+        case cards = "Akor Kartları"
         case rhythm = "Ritim"
         var id: String { self.rawValue }
     }
-    
-    private var timer: Timer?
-    
+
+    private let originalCapo: Int
+
     init(song: Song) {
         self.song = song
-        self.currentCapo = Int(song.kapo ?? "0") ?? 0
+        let capo = Int(song.kapo ?? "0") ?? 0
+        self.originalCapo = capo
+        self.currentCapo = capo
     }
-    
-    // MARK: - Logic
-    
+
+    // MARK: - Effective transpose (manual transpose + capo difference)
+
+    /// Total semitones to shift chords: manual transpose + capo change from original
+    var effectiveTranspose: Int {
+        transposeAmount + (currentCapo - originalCapo)
+    }
+
+    /// Current key after transpose
+    var currentKey: String? {
+        guard let key = song.orjinal_ton, !key.isEmpty else { return nil }
+        let transposed = MusicTheory.transposeChord(key, semitones: effectiveTranspose)
+        return transposed
+    }
+
+    /// Whether the key has changed from original
+    var keyChanged: Bool {
+        effectiveTranspose != 0
+    }
+
+    // MARK: - Transposed blocks
+
     var transposedBlocks: [RenderBlock] {
         guard let blocks = song.lyrics_data?.lines else { return [] }
-        
-        if transposeAmount == 0 { return blocks }
-        
+        let shift = effectiveTranspose
+        if shift == 0 { return blocks }
+
         return blocks.map { block in
-            // Only transpose if block type is 'block' or 'chords' and has chords content
-            guard (block.type == .block || block.type == .chords), let chordsLine = block.chords else {
+            guard (block.type == .block || block.type == .chords) else {
                 return block
             }
-            
-            let transposedChords = MusicTheory.transposeLine(chordsLine, semitones: transposeAmount)
-            
+
+            let chordText: String?
+            if block.type == .block {
+                chordText = block.chords
+            } else {
+                chordText = block.content ?? block.chords
+            }
+
+            guard let chordsLine = chordText, !chordsLine.isEmpty else {
+                return block
+            }
+
+            let transposedChords = MusicTheory.transposeLine(chordsLine, semitones: shift)
+            let transposedExtracted = block.chords_extracted?.map {
+                MusicTheory.transposeChord($0, semitones: shift)
+            }
+
             return RenderBlock(
                 type: block.type,
-                chords: transposedChords,
+                chords: block.type == .block ? transposedChords : block.chords,
                 lyrics: block.lyrics,
-                content: block.content,
-                chords_extracted: block.chords_extracted
+                content: block.type == .chords ? transposedChords : block.content,
+                chords_extracted: transposedExtracted
             )
         }
     }
-    
+
+    /// All unique chords used, after transpose
+    var transposedChords: [String] {
+        let shift = effectiveTranspose
+        return song.chords.map { MusicTheory.transposeChord($0, semitones: shift) }
+    }
+
     func toggleAutoScroll() {
         isAutoScrolling.toggle()
-    }
-    
-    func transposeUp() {
-        if transposeAmount < 12 { transposeAmount += 1 }
-    }
-    
-    func transposeDown() {
-        if transposeAmount > -12 { transposeAmount -= 1 }
-    }
-    
-    func capoUp() {
-        if currentCapo < 12 { currentCapo += 1 }
-    }
-    
-    func capoDown() {
-        if currentCapo > 0 { currentCapo -= 1 }
     }
 }
 

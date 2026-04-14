@@ -14,14 +14,18 @@ class SongDataService: ObservableObject {
     @AppStorage("fontSize") var fontSize: Int = 16
     @AppStorage("scrollSpeed") var scrollSpeed: Int = 3
 
+    @Published var songNotes: [Int: String] = [:]
+
     private let favoritesKey = "favorites"
     private let recentKey = "recentlyViewed"
     private let playlistsKey = "playlists"
+    private let notesKey = "songNotes"
 
     init() {
         loadFavorites()
         loadRecent()
         loadPlaylists()
+        loadNotes()
         loadSongs()
     }
 
@@ -93,17 +97,40 @@ class SongDataService: ObservableObject {
         }
     }
 
+    /// Normalizes Turkish characters for accent-insensitive search
+    private func normalize(_ text: String) -> String {
+        text.lowercased()
+            .replacingOccurrences(of: "ı", with: "i")
+            .replacingOccurrences(of: "ğ", with: "g")
+            .replacingOccurrences(of: "ü", with: "u")
+            .replacingOccurrences(of: "ş", with: "s")
+            .replacingOccurrences(of: "ö", with: "o")
+            .replacingOccurrences(of: "ç", with: "c")
+            .replacingOccurrences(of: "İ", with: "i")
+    }
+
     func searchSongs(query: String) -> [Song] {
-        let q = query.lowercased().trimmingCharacters(in: .whitespaces)
+        let q = normalize(query.trimmingCharacters(in: .whitespaces))
         if q.isEmpty { return [] }
         return songs.filter {
-            $0.sarkiadi.lowercased().contains(q) ||
-            $0.sanatci.lowercased().contains(q)
+            normalize($0.sarkiadi).contains(q) ||
+            normalize($0.sanatci).contains(q)
         }
     }
 
     func popularSongs() -> [Song] {
         Array(songs.prefix(15))
+    }
+
+    /// All unique artists sorted
+    func allArtists() -> [String] {
+        let artists = Set(songs.map { $0.sanatci })
+        return artists.sorted()
+    }
+
+    /// Songs by a specific artist
+    func songsByArtist(_ artist: String) -> [Song] {
+        songs.filter { $0.sanatci == artist }.sorted { $0.sarkiadi < $1.sarkiadi }
     }
 
     func recentSongs() -> [Song] {
@@ -206,6 +233,39 @@ class SongDataService: ObservableObject {
         if let data = UserDefaults.standard.data(forKey: playlistsKey),
            let saved = try? JSONDecoder().decode([Playlist].self, from: data) {
             playlists = saved
+        }
+    }
+
+    // MARK: - Song Notes
+
+    func getNote(for songId: Int) -> String {
+        songNotes[songId] ?? ""
+    }
+
+    func setNote(for songId: Int, note: String) {
+        if note.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            songNotes.removeValue(forKey: songId)
+        } else {
+            songNotes[songId] = note
+        }
+        saveNotes()
+    }
+
+    func hasNote(for songId: Int) -> Bool {
+        guard let note = songNotes[songId] else { return false }
+        return !note.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
+    private func saveNotes() {
+        if let data = try? JSONEncoder().encode(songNotes) {
+            UserDefaults.standard.set(data, forKey: notesKey)
+        }
+    }
+
+    private func loadNotes() {
+        if let data = UserDefaults.standard.data(forKey: notesKey),
+           let saved = try? JSONDecoder().decode([Int: String].self, from: data) {
+            songNotes = saved
         }
     }
 }

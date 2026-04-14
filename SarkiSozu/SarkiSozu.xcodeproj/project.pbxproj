@@ -20,6 +20,15 @@
 		08B8BDE736574CF5BA0B4AC2 /* PlaylistsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBD0D8104BA4C22A7D93807 /* PlaylistsView.swift */; };
 		BF28B236A1F4470D87D10164 /* ChordLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6AE3E9249C4F4B97E2DBAC /* ChordLibraryView.swift */; };
 		AABB1122CCDD3344EEFF5566 /* PlaylistDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5566EEFFDDCC3344BBAA1122 /* PlaylistDetailView.swift */; };
+		AA22BB33CC44DD55EE66FF77 /* ArtistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA33BB44CC55DD66EE77FF88 /* ArtistView.swift */; };
+		BB11CC22DD33EE44FF550011 /* SetlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB22CC33DD44EE55FF660022 /* SetlistView.swift */; };
+		CC11DD22EE33FF44AA550066 /* CapoCalculatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC22DD33EE44FF55AA660077 /* CapoCalculatorView.swift */; };
+		DD11EE22FF33AA44BB550088 /* PracticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD22EE33FF44AA55BB660099 /* PracticeView.swift */; };
+		EE11FF22AA33BB44CC5500AA /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE22FF33AA44BB55CC6600BB /* OnboardingView.swift */; };
+		FF11AA22BB33CC44DD5500EE /* CanIPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF22AA33BB44CC55DD6600FF /* CanIPlayView.swift */; };
+		AA11BB22CC33DD44EE55FF01 /* MetronomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA22BB33CC44DD55EE66FF01 /* MetronomeView.swift */; };
+		AA11BB22CC33DD44EE55FF02 /* TunerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA22BB33CC44DD55EE66FF02 /* TunerView.swift */; };
+		AA11BB22CC33DD44EE55FF03 /* ChordDetectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA22BB33CC44DD55EE66FF03 /* ChordDetectorView.swift */; };
 		D27C0FD09FB6FABB04A7D33F = {isa = PBXBuildFile; fileRef = BE23A2B487257A639348D2E6; };
 		54F1B4987E023E0D67B3BB55 = {isa = PBXBuildFile; fileRef = 23F879292E9F32C08A30403E; };
 		9F3C7DC5C4DB403E10C4B5C0 = {isa = PBXBuildFile; fileRef = 2A56D514F9D1975AF688E75A; };
@@ -101,6 +110,15 @@
 		DCBD0D8104BA4C22A7D93807 /* PlaylistsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlaylistsView.swift"; sourceTree = "<group>"; };
 		2C6AE3E9249C4F4B97E2DBAC /* ChordLibraryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChordLibraryView.swift"; sourceTree = "<group>"; };
 		5566EEFFDDCC3344BBAA1122 /* PlaylistDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlaylistDetailView.swift"; sourceTree = "<group>"; };
+		AA33BB44CC55DD66EE77FF88 /* ArtistView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ArtistView.swift"; sourceTree = "<group>"; };
+		BB22CC33DD44EE55FF660022 /* SetlistView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SetlistView.swift"; sourceTree = "<group>"; };
+		CC22DD33EE44FF55AA660077 /* CapoCalculatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CapoCalculatorView.swift"; sourceTree = "<group>"; };
+		DD22EE33FF44AA55BB660099 /* PracticeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PracticeView.swift"; sourceTree = "<group>"; };
+		EE22FF33AA44BB55CC6600BB /* OnboardingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OnboardingView.swift"; sourceTree = "<group>"; };
+		FF22AA33BB44CC55DD6600FF /* CanIPlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CanIPlayView.swift"; sourceTree = "<group>"; };
+		AA22BB33CC44DD55EE66FF01 /* MetronomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MetronomeView.swift"; sourceTree = "<group>"; };
+		AA22BB33CC44DD55EE66FF02 /* TunerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TunerView.swift"; sourceTree = "<group>"; };
+		AA22BB33CC44DD55EE66FF03 /* ChordDetectorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChordDetectorView.swift"; sourceTree = "<group>"; };
 		BE23A2B487257A639348D2E6 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchView.swift"; sourceTree = "<group>"; };
 		23F879292E9F32C08A30403E = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsView.swift"; sourceTree = "<group>"; };
 		2A56D514F9D1975AF688E75A = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SongDetailView.swift"; sourceTree = "<group>"; };
@@ -201,6 +219,15 @@
 				DCBD0D8104BA4C22A7D93807 /* PlaylistsView.swift */,
 				2C6AE3E9249C4F4B97E2DBAC /* ChordLibraryView.swift */,
 				5566EEFFDDCC3344BBAA1122 /* PlaylistDetailView.swift */,
+				AA33BB44CC55DD66EE77FF88 /* ArtistView.swift */,
+				BB22CC33DD44EE55FF660022 /* SetlistView.swift */,
+				CC22DD33EE44FF55AA660077 /* CapoCalculatorView.swift */,
+				DD22EE33FF44AA55BB660099 /* PracticeView.swift */,
+				EE22FF33AA44BB55CC6600BB /* OnboardingView.swift */,
+				FF22AA33BB44CC55DD6600FF /* CanIPlayView.swift */,
+				AA22BB33CC44DD55EE66FF01 /* MetronomeView.swift */,
+				AA22BB33CC44DD55EE66FF02 /* TunerView.swift */,
+				AA22BB33CC44DD55EE66FF03 /* ChordDetectorView.swift */,
 				BE23A2B487257A639348D2E6,
 				23F879292E9F32C08A30403E,
 				2A56D514F9D1975AF688E75A,
@@ -336,6 +363,15 @@
 				08B8BDE736574CF5BA0B4AC2 /* PlaylistsView.swift in Sources */,
 				BF28B236A1F4470D87D10164 /* ChordLibraryView.swift in Sources */,
 				AABB1122CCDD3344EEFF5566 /* PlaylistDetailView.swift in Sources */,
+				AA22BB33CC44DD55EE66FF77 /* ArtistView.swift in Sources */,
+				BB11CC22DD33EE44FF550011 /* SetlistView.swift in Sources */,
+				CC11DD22EE33FF44AA550066 /* CapoCalculatorView.swift in Sources */,
+				DD11EE22FF33AA44BB550088 /* PracticeView.swift in Sources */,
+				EE11FF22AA33BB44CC5500AA /* OnboardingView.swift in Sources */,
+				FF11AA22BB33CC44DD5500EE /* CanIPlayView.swift in Sources */,
+				AA11BB22CC33DD44EE55FF01 /* MetronomeView.swift in Sources */,
+				AA11BB22CC33DD44EE55FF02 /* TunerView.swift in Sources */,
+				AA11BB22CC33DD44EE55FF03 /* ChordDetectorView.swift in Sources */,
 				D27C0FD09FB6FABB04A7D33F,
 				54F1B4987E023E0D67B3BB55,
 				9F3C7DC5C4DB403E10C4B5C0,
@@ -480,6 +516,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Akort aleti ve akor tespiti için mikrofon erişimi gereklidir.";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -505,6 +542,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Akort aleti ve akor tespiti için mikrofon erişimi gereklidir.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

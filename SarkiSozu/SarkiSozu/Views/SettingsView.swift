@@ -90,6 +90,41 @@ struct SettingsView: View {
                         Image(systemName: "music.note.list").foregroundColor(DS.Color.accent)
                     }
                 }
+                NavigationLink(destination: CapoCalculatorView()) {
+                    Label {
+                        Text("Kapo Hesaplayıcı").foregroundColor(DS.Color.textPrimary)
+                    } icon: {
+                        Image(systemName: "guitars").foregroundColor(.orange)
+                    }
+                }
+                NavigationLink(destination: PracticeView()) {
+                    Label {
+                        Text("Pratik & İstatistik").foregroundColor(DS.Color.textPrimary)
+                    } icon: {
+                        Image(systemName: "timer").foregroundColor(.green)
+                    }
+                }
+                NavigationLink(destination: MetronomeView()) {
+                    Label {
+                        Text("Metronom").foregroundColor(DS.Color.textPrimary)
+                    } icon: {
+                        Image(systemName: "metronome").foregroundColor(.red)
+                    }
+                }
+                NavigationLink(destination: TunerView()) {
+                    Label {
+                        Text("Akort Aleti").foregroundColor(DS.Color.textPrimary)
+                    } icon: {
+                        Image(systemName: "tuningfork").foregroundColor(.purple)
+                    }
+                }
+                NavigationLink(destination: ChordDetectorView()) {
+                    Label {
+                        Text("Akor Tespiti").foregroundColor(DS.Color.textPrimary)
+                    } icon: {
+                        Image(systemName: "waveform").foregroundColor(.cyan)
+                    }
+                }
             }
             
             Section("Uygulama") {

@@ -6,8 +6,7 @@ struct SearchView: View {
     @State private var showingFilters = false
     
     init() {
-        // Initialize with default service
-        _viewModel = StateObject(wrappedValue: SearchViewModel(service: SongDataService()))
+        _viewModel = StateObject(wrappedValue: SearchViewModel(service: SongDataService.shared))
     }
     
     var body: some View {

@@ -4,6 +4,7 @@ struct PlaylistDetailView: View {
     @EnvironmentObject var dataService: SongDataService
     let playlist: Playlist
     @State private var showAddSongs = false
+    @State private var showSetlist = false
 
     private var currentPlaylist: Playlist {
         dataService.playlists.first(where: { $0.id == playlist.id }) ?? playlist
@@ -48,13 +49,23 @@ struct PlaylistDetailView: View {
         .navigationTitle(currentPlaylist.name)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: { showAddSongs = true }) {
-                    Image(systemName: "plus")
+                HStack(spacing: 16) {
+                    if !songs.isEmpty {
+                        Button(action: { showSetlist = true }) {
+                            Image(systemName: "tv")
+                        }
+                    }
+                    Button(action: { showAddSongs = true }) {
+                        Image(systemName: "plus")
+                    }
                 }
             }
         }
         .sheet(isPresented: $showAddSongs) {
             AddSongsToPlaylistView(playlistId: playlist.id)
+        }
+        .fullScreenCover(isPresented: $showSetlist) {
+            SetlistView(songs: songs)
         }
     }
 }
