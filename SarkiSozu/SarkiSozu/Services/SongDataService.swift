@@ -146,6 +146,14 @@ class SongDataService: ObservableObject {
     }
 
     // MARK: - Favorites
+
+    /// Returns true if the user can add another favorite (always true for Pro users).
+    @MainActor
+    func canAddFavorite() -> Bool {
+        if ProManager.shared.hasProAccess { return true }
+        return favorites.count < ProGate.freeFavoritesLimit
+    }
+
     func toggleFavorite(_ songId: Int) {
         if favorites.contains(songId) {
             favorites.remove(songId)
@@ -155,12 +163,30 @@ class SongDataService: ObservableObject {
         saveFavorites()
     }
 
+    /// Gated add: returns false if free limit reached and the song isn't already a favorite.
+    @MainActor
+    func tryToggleFavorite(_ songId: Int) -> Bool {
+        if favorites.contains(songId) {
+            favorites.remove(songId)
+            saveFavorites()
+            return true
+        }
+        if !ProManager.shared.hasProAccess && favorites.count >= ProGate.freeFavoritesLimit {
+            return false
+        }
+        favorites.insert(songId)
+        saveFavorites()
+        return true
+    }
+
     func isFavorite(_ songId: Int) -> Bool {
         favorites.contains(songId)
     }
 
     private func saveFavorites() {
         UserDefaults.standard.set(Array(favorites), forKey: favoritesKey)
+        let snapshot = favorites
+        Task { @MainActor in SyncManager.shared.publishFavorites(snapshot) }
     }
 
     private func loadFavorites() {
@@ -177,6 +203,8 @@ class SongDataService: ObservableObject {
             recentlyViewed = Array(recentlyViewed.prefix(30))
         }
         UserDefaults.standard.set(recentlyViewed, forKey: recentKey)
+        let snapshot = recentlyViewed
+        Task { @MainActor in SyncManager.shared.publishRecent(snapshot) }
     }
 
     private func loadRecent() {
@@ -185,10 +213,27 @@ class SongDataService: ObservableObject {
 
     // MARK: - Playlists
 
+    @MainActor
+    func canCreatePlaylist() -> Bool {
+        if ProManager.shared.hasProAccess { return true }
+        return playlists.count < ProGate.freePlaylistsLimit
+    }
+
     func createPlaylist(name: String) {
         let playlist = Playlist(name: name)
         playlists.append(playlist)
         savePlaylists()
+    }
+
+    /// Gated create: returns false if free limit reached.
+    @MainActor
+    @discardableResult
+    func tryCreatePlaylist(name: String) -> Bool {
+        if !ProManager.shared.hasProAccess && playlists.count >= ProGate.freePlaylistsLimit {
+            return false
+        }
+        createPlaylist(name: name)
+        return true
     }
 
     func deletePlaylist(_ id: UUID) {
@@ -226,6 +271,7 @@ class SongDataService: ObservableObject {
     private func savePlaylists() {
         if let data = try? JSONEncoder().encode(playlists) {
             UserDefaults.standard.set(data, forKey: playlistsKey)
+            Task { @MainActor in SyncManager.shared.publishPlaylists(data) }
         }
     }
 
@@ -259,6 +305,8 @@ class SongDataService: ObservableObject {
     private func saveNotes() {
         if let data = try? JSONEncoder().encode(songNotes) {
             UserDefaults.standard.set(data, forKey: notesKey)
+            let snapshot = songNotes
+            Task { @MainActor in SyncManager.shared.publishNotes(snapshot) }
         }
     }
 

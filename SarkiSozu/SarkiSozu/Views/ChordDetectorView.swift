@@ -6,28 +6,52 @@ import Accelerate
 
 struct ChordDetectorView: View {
     @StateObject private var detector = ChordDetectionEngine()
+    @AppStorage("chordDetectorSensitivity") private var sensitivity: Double = 0.015
 
     var body: some View {
-        VStack(spacing: 0) {
-            Spacer()
+        ScrollView {
+            VStack(spacing: DS.Spacing.m) {
+                // Detected chord + diagram
+                chordDisplay
+                    .padding(.top, DS.Spacing.m)
 
-            // Detected chord
-            chordDisplay
+                // Diagram for detected chord
+                if detector.detectedChord != "?" {
+                    ChordDiagramView(chordName: detector.detectedChord, size: .medium)
+                        .transition(.scale.combined(with: .opacity))
+                }
 
-            // Confidence meter
-            confidenceMeter
+                // Confidence meter
+                confidenceMeter
 
-            Spacer()
+                Divider()
 
-            // Recent chords
-            recentChordsSection
+                // Mic level meter
+                micLevelMeter
 
-            // Control
-            controlButton
-                .padding(.bottom, DS.Spacing.l)
+                // Chroma visualization
+                chromaVisualization
+
+                // Sensitivity slider
+                sensitivitySlider
+
+                // Recent chords
+                recentChordsSection
+
+                // Control
+                controlButton
+                    .padding(.bottom, DS.Spacing.l)
+            }
+            .padding(.horizontal, DS.Spacing.m)
         }
         .navigationTitle("Akor Tespiti")
         .background(Color(uiColor: .systemGroupedBackground))
+        .onAppear {
+            detector.sensitivity = Float(sensitivity)
+        }
+        .onChange(of: sensitivity) { _, newValue in
+            detector.sensitivity = Float(newValue)
+        }
         .onDisappear {
             detector.stop()
         }
@@ -118,6 +142,111 @@ struct ChordDetectorView: View {
         .padding(.top, DS.Spacing.m)
     }
 
+    // MARK: - Mic Level Meter
+
+    private var micLevelMeter: some View {
+        VStack(spacing: 4) {
+            HStack {
+                Image(systemName: detector.micLevel > 0.05 ? "mic.fill" : "mic")
+                    .foregroundColor(detector.micLevel > 0.05 ? DS.Color.accent : .secondary)
+                    .font(.caption)
+                Text("Mikrofon Seviyesi")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                Spacer()
+            }
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    RoundedRectangle(cornerRadius: 3)
+                        .fill(Color(uiColor: .tertiarySystemFill))
+                    HStack(spacing: 1) {
+                        ForEach(0..<20, id: \.self) { i in
+                            let fraction = Float(i) / 20.0
+                            let active = detector.micLevel > fraction
+                            let color: Color = i < 12 ? .green : (i < 16 ? .yellow : .red)
+                            Rectangle()
+                                .fill(active ? color : Color(uiColor: .tertiarySystemFill))
+                                .frame(width: (geo.size.width - 19) / 20, height: 6)
+                                .cornerRadius(1)
+                        }
+                    }
+                    .animation(.linear(duration: 0.05), value: detector.micLevel)
+                }
+            }
+            .frame(height: 6)
+        }
+    }
+
+    // MARK: - Chroma Visualization
+
+    private var chromaVisualization: some View {
+        VStack(spacing: 6) {
+            HStack {
+                Text("Aktif Notalar")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                Spacer()
+                if !detector.activeNotes.isEmpty {
+                    Text(detector.activeNotes.sorted().map { detector.noteNames[$0] }.joined(separator: " · "))
+                        .font(.caption.monospaced())
+                        .foregroundColor(DS.Color.accent)
+                }
+            }
+            HStack(alignment: .bottom, spacing: 4) {
+                ForEach(0..<12, id: \.self) { i in
+                    let energy = CGFloat(detector.chromaEnergy[i])
+                    let active = detector.activeNotes.contains(i)
+                    VStack(spacing: 2) {
+                        Spacer(minLength: 0)
+                        RoundedRectangle(cornerRadius: 2)
+                            .fill(active ? DS.Color.accent : Color(uiColor: .tertiarySystemFill))
+                            .frame(height: max(2, energy * 60))
+                            .animation(.easeOut(duration: 0.1), value: energy)
+                        Text(detector.noteNames[i])
+                            .font(.system(size: 9, weight: active ? .bold : .regular, design: .monospaced))
+                            .foregroundColor(active ? DS.Color.accent : .secondary)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: 80)
+                }
+            }
+            .frame(height: 80)
+        }
+        .padding(DS.Spacing.s)
+        .background(Color(uiColor: .secondarySystemGroupedBackground))
+        .cornerRadius(DS.CornerRadius.small)
+    }
+
+    // MARK: - Sensitivity Slider
+
+    private var sensitivitySlider: some View {
+        VStack(spacing: 4) {
+            HStack {
+                Image(systemName: "waveform")
+                    .foregroundColor(.secondary)
+                    .font(.caption)
+                Text("Hassasiyet")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                Spacer()
+                Text(sensitivityLabel)
+                    .font(.caption.monospaced())
+                    .foregroundColor(DS.Color.accent)
+            }
+            Slider(value: $sensitivity, in: 0.005...0.08)
+                .tint(DS.Color.accent)
+        }
+    }
+
+    private var sensitivityLabel: String {
+        switch sensitivity {
+        case ..<0.01: return "Çok Hassas"
+        case ..<0.02: return "Hassas"
+        case ..<0.04: return "Normal"
+        case ..<0.06: return "Düşük"
+        default: return "Sadece Yüksek"
+        }
+    }
+
     // MARK: - Recent Chords
 
     private var recentChordsSection: some View {
@@ -179,8 +308,20 @@ class ChordDetectionEngine: ObservableObject {
     @Published var recentChords: [String] = []
     @Published var errorMessage: String?
 
+    /// Current microphone input level (0...1 RMS)
+    @Published var micLevel: Float = 0
+
+    /// 12-semitone chroma energy (0...1 normalized), index 0 = C
+    @Published var chromaEnergy: [Float] = Array(repeating: 0, count: 12)
+
+    /// Set of currently active note indices (0-11, C=0)
+    @Published var activeNotes: Set<Int> = []
+
+    /// User-adjustable detection sensitivity (0.1 = loud only, 0.005 = very sensitive)
+    var sensitivity: Float = 0.015
+
     private var audioEngine: AVAudioEngine?
-    private let noteNames = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+    let noteNames = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 
     // Common guitar chord templates: (chord name, type label, intervals from root as semitone set)
     private let chordTemplates: [(String, String, Set<Int>)] = [
@@ -277,24 +418,43 @@ class ChordDetectionEngine: ObservableObject {
         // Check RMS
         var rms: Float = 0
         vDSP_rmsqv(channelData, 1, &rms, vDSP_Length(frameLength))
-        guard rms > 0.015 else {
+        let levelNormalized = min(1.0, max(0.0, rms * 20))
+
+        guard rms > sensitivity else {
             DispatchQueue.main.async {
+                self.micLevel = levelNormalized
                 self.detectedChord = "?"
                 self.chordType = ""
                 self.confidence = 0
                 self.detectedNotes = ""
+                self.chromaEnergy = Array(repeating: 0, count: 12)
+                self.activeNotes = []
             }
             return
         }
 
         // FFT to find prominent frequencies
-        let notes = detectNotes(data: channelData, count: frameLength, sampleRate: sampleRate)
-        guard notes.count >= 2 else { return }
+        let chromaResult = detectChroma(data: channelData, count: frameLength, sampleRate: sampleRate)
+        let notes = chromaResult.notes
+        let chroma = chromaResult.chroma
+
+        guard notes.count >= 2 else {
+            DispatchQueue.main.async {
+                self.micLevel = levelNormalized
+                self.chromaEnergy = chroma
+                self.activeNotes = Set(notes)
+            }
+            return
+        }
 
         // Match against chord templates
         let (chord, type, conf) = matchChord(notes: notes)
 
         DispatchQueue.main.async {
+            self.micLevel = levelNormalized
+            self.chromaEnergy = chroma
+            self.activeNotes = Set(notes)
+
             if conf > 0.4 {
                 let fullChord = chord
                 if self.detectedChord != fullChord {
@@ -315,11 +475,11 @@ class ChordDetectionEngine: ObservableObject {
         }
     }
 
-    private func detectNotes(data: UnsafePointer<Float>, count: Int, sampleRate: Float) -> [Int] {
+    private func detectChroma(data: UnsafePointer<Float>, count: Int, sampleRate: Float) -> (notes: [Int], chroma: [Float]) {
         // Use FFT
         let log2n = vDSP_Length(log2(Float(count)))
         let fftSize = Int(1 << log2n)
-        guard let fftSetup = vDSP_create_fftsetup(log2n, FFTRadix(kFFTRadix2)) else { return [] }
+        guard let fftSetup = vDSP_create_fftsetup(log2n, FFTRadix(kFFTRadix2)) else { return ([], Array(repeating: 0, count: 12)) }
         defer { vDSP_destroy_fftsetup(fftSetup) }
 
         var realPart = [Float](repeating: 0, count: fftSize / 2)
@@ -370,7 +530,7 @@ class ChordDetectionEngine: ObservableObject {
 
         // Normalize
         let maxEnergy = chromaEnergy.max() ?? 1
-        guard maxEnergy > 0 else { return [] }
+        guard maxEnergy > 0 else { return ([], Array(repeating: 0, count: 12)) }
         chromaEnergy = chromaEnergy.map { $0 / maxEnergy }
 
         // Pick notes above threshold
@@ -381,7 +541,7 @@ class ChordDetectionEngine: ObservableObject {
             }
         }
 
-        return detectedNotes.sorted()
+        return (detectedNotes.sorted(), chromaEnergy)
     }
 
     private func matchChord(notes: [Int]) -> (String, String, Double) {

@@ -2,13 +2,22 @@ import SwiftUI
 
 struct SongDetailView: View {
     @EnvironmentObject var dataService: SongDataService
+    @EnvironmentObject var pro: ProManager
     @StateObject private var viewModel: SongDetailViewModel
     @Environment(\.dismiss) var dismiss
     @State private var showAddToPlaylist = false
     @State private var showNotes = false
     @State private var showSetlist = false
+    @State private var showRecording = false
     @State private var noteText = ""
     @State private var scrollOffset: CGFloat = 0
+
+    // Paywall / share / export
+    @State private var showPaywall = false
+    @State private var paywallFeature: ProGate.Feature? = nil
+    @State private var shareItems: [Any] = []
+    @State private var showShareSheet = false
+    @State private var showExportOptions = false
 
     // Auto-scroll
     @State private var autoScrollTimer: Timer?
@@ -81,12 +90,58 @@ struct SongDetailView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack(spacing: 16) {
+                        Menu {
+                            Button {
+                                HapticManager.tap()
+                                shareAsText()
+                            } label: {
+                                Label("Metin Olarak Paylaş", systemImage: "text.alignleft")
+                            }
+                            Button {
+                                HapticManager.tap()
+                                if pro.hasProAccess {
+                                    exportPDF()
+                                } else {
+                                    paywallFeature = .exportPDF
+                                    showPaywall = true
+                                }
+                            } label: {
+                                Label("PDF Olarak Kaydet", systemImage: "doc.richtext")
+                            }
+                            Button {
+                                HapticManager.tap()
+                                if pro.hasProAccess {
+                                    exportChordPro()
+                                } else {
+                                    paywallFeature = .exportChordPro
+                                    showPaywall = true
+                                }
+                            } label: {
+                                Label("ChordPro Dışa Aktar", systemImage: "music.note.list")
+                            }
+                        } label: {
+                            Image(systemName: "square.and.arrow.up")
+                                .foregroundColor(.primary)
+                        }
+
+                        Button(action: {
+                            HapticManager.tap()
+                            showRecording = true
+                        }) {
+                            Image(systemName: "mic.circle")
+                                .foregroundColor(.primary)
+                        }
+
                         Button(action: { showAddToPlaylist = true }) {
                             Image(systemName: "text.badge.plus")
                                 .foregroundColor(.primary)
                         }
                         Button(action: {
-                            dataService.toggleFavorite(viewModel.song.id)
+                            HapticManager.favorite()
+                            if !dataService.tryToggleFavorite(viewModel.song.id) {
+                                paywallFeature = .favoritesLimit
+                                showPaywall = true
+                            }
                         }) {
                             Image(systemName: dataService.isFavorite(viewModel.song.id) ? "heart.fill" : "heart")
                                 .foregroundColor(dataService.isFavorite(viewModel.song.id) ? .red : .primary)
@@ -108,6 +163,57 @@ struct SongDetailView: View {
             .fullScreenCover(isPresented: $showSetlist) {
                 SetlistView(songs: [viewModel.song])
             }
+            .sheet(isPresented: $showRecording) {
+                SongRecordingSheet(song: viewModel.song)
+            }
+            .paywallSheet(isPresented: $showPaywall, feature: paywallFeature)
+            .sheet(isPresented: $showShareSheet) {
+                ShareSheet(items: shareItems)
+            }
+        }
+    }
+
+    // MARK: - Export helpers
+
+    private func shareAsText() {
+        let text = ExportService.plainText(
+            from: viewModel.song,
+            blocks: viewModel.transposedBlocks,
+            currentKey: viewModel.currentKey
+        )
+        shareItems = [text]
+        showShareSheet = true
+    }
+
+    private func exportPDF() {
+        let data = ExportService.pdf(
+            from: viewModel.song,
+            blocks: viewModel.transposedBlocks,
+            currentKey: viewModel.currentKey
+        )
+        let filename = ExportService.filename(for: viewModel.song, ext: "pdf")
+        if let url = try? ExportService.writeToTemp(data: data, filename: filename) {
+            shareItems = [url]
+            showShareSheet = true
+            HapticManager.success()
+        } else {
+            HapticManager.error()
+        }
+    }
+
+    private func exportChordPro() {
+        let str = ExportService.chordPro(
+            from: viewModel.song,
+            blocks: viewModel.transposedBlocks,
+            currentKey: viewModel.currentKey
+        )
+        let filename = ExportService.filename(for: viewModel.song, ext: "cho")
+        if let url = try? ExportService.writeToTemp(string: str, filename: filename) {
+            shareItems = [url]
+            showShareSheet = true
+            HapticManager.success()
+        } else {
+            HapticManager.error()
         }
     }
 
@@ -160,43 +266,86 @@ struct SongDetailView: View {
             }
 
             // Action buttons row
-            HStack(spacing: 12) {
-                // Concert mode
-                Button {
-                    showSetlist = true
-                } label: {
-                    HStack(spacing: 4) {
-                        Image(systemName: "tv")
-                        Text("Konser Modu")
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    // Listen on streaming services
+                    Menu {
+                        Button {
+                            HapticManager.tap()
+                            StreamingService.open(StreamingService.spotifyURL(
+                                artist: viewModel.song.sanatci,
+                                title: viewModel.song.sarkiadi
+                            ))
+                        } label: {
+                            Label("Spotify", systemImage: "music.note")
+                        }
+                        Button {
+                            HapticManager.tap()
+                            StreamingService.open(StreamingService.appleMusicURL(
+                                artist: viewModel.song.sanatci,
+                                title: viewModel.song.sarkiadi
+                            ))
+                        } label: {
+                            Label("Apple Music", systemImage: "music.note")
+                        }
+                        Button {
+                            HapticManager.tap()
+                            StreamingService.open(StreamingService.youtubeURL(
+                                artist: viewModel.song.sanatci,
+                                title: viewModel.song.sarkiadi
+                            ))
+                        } label: {
+                            Label("YouTube", systemImage: "play.rectangle")
+                        }
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "play.circle.fill")
+                            Text("Dinle")
+                        }
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Color.green.opacity(0.15))
+                        .foregroundColor(.green)
+                        .cornerRadius(16)
                     }
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(Color.purple.opacity(0.1))
-                    .foregroundColor(.purple)
-                    .cornerRadius(16)
-                }
 
-                // Notes
-                Button {
-                    noteText = dataService.getNote(for: viewModel.song.id)
-                    showNotes = true
-                } label: {
-                    HStack(spacing: 4) {
-                        Image(systemName: dataService.hasNote(for: viewModel.song.id) ? "note.text" : "note.text.badge.plus")
-                        Text("Notlarım")
+                    // Concert mode
+                    Button {
+                        showSetlist = true
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "tv")
+                            Text("Konser Modu")
+                        }
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Color.purple.opacity(0.1))
+                        .foregroundColor(.purple)
+                        .cornerRadius(16)
                     }
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(Color.teal.opacity(0.1))
-                    .foregroundColor(.teal)
-                    .cornerRadius(16)
-                }
 
-                Spacer()
+                    // Notes
+                    Button {
+                        noteText = dataService.getNote(for: viewModel.song.id)
+                        showNotes = true
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: dataService.hasNote(for: viewModel.song.id) ? "note.text" : "note.text.badge.plus")
+                            Text("Notlarım")
+                        }
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Color.teal.opacity(0.1))
+                        .foregroundColor(.teal)
+                        .cornerRadius(16)
+                    }
+                }
             }
             .padding(.top, 4)
         }

@@ -93,6 +93,16 @@
 		FCC9AB096A074900A881B457 /* G.svg in Resources */ = {isa = PBXBuildFile; fileRef = 7748E2CFC6C14CF1BD0C5FAB /* G.svg */; };
 		43F28404FEFA49C7B34F5A78 /* G7.svg in Resources */ = {isa = PBXBuildFile; fileRef = 263014E6E07044BDB5CA04E5 /* G7.svg */; };
 		2873B9E0EA694C2F9E4EDF31 /* Gm.svg in Resources */ = {isa = PBXBuildFile; fileRef = 0A984F85B36A4B81AFA2F93C /* Gm.svg */; };
+		A1B2C3D4E5F60001AABBCC01 /* ProManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60001DDEEFF01 /* ProManager.swift */; };
+		A1B2C3D4E5F60002AABBCC02 /* ExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60002DDEEFF02 /* ExportService.swift */; };
+		A1B2C3D4E5F60003AABBCC03 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60003DDEEFF03 /* HapticManager.swift */; };
+		A1B2C3D4E5F60004AABBCC04 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60004DDEEFF04 /* PaywallView.swift */; };
+		A1B2C3D4E5F60006AABBCC06 /* RecordingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60006DDEEFF06 /* RecordingManager.swift */; };
+		A1B2C3D4E5F60007AABBCC07 /* SongRecordingSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60007DDEEFF07 /* SongRecordingSheet.swift */; };
+		A1B2C3D4E5F60008AABBCC08 /* StreamingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60008DDEEFF08 /* StreamingService.swift */; };
+		A1B2C3D4E5F60009AABBCC09 /* CustomChordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60009DDEEFF09 /* CustomChordStore.swift */; };
+		A1B2C3D4E5F6000AAABBCC0A /* ChordEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000ADDEEFF0A /* ChordEditorView.swift */; };
+		A1B2C3D4E5F6000BAABBCC0B /* SyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6000BDDEEFF0B /* SyncManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -147,6 +157,17 @@
 		7748E2CFC6C14CF1BD0C5FAB /* G.svg */ = {isa = PBXFileReference; lastKnownFileType = text; name = "G.svg"; path = "SarkiSozu/Resources/ChordSVGs/G.svg"; sourceTree = "SOURCE_ROOT"; };
 		263014E6E07044BDB5CA04E5 /* G7.svg */ = {isa = PBXFileReference; lastKnownFileType = text; name = "G7.svg"; path = "SarkiSozu/Resources/ChordSVGs/G7.svg"; sourceTree = "SOURCE_ROOT"; };
 		0A984F85B36A4B81AFA2F93C /* Gm.svg */ = {isa = PBXFileReference; lastKnownFileType = text; name = "Gm.svg"; path = "SarkiSozu/Resources/ChordSVGs/Gm.svg"; sourceTree = "SOURCE_ROOT"; };
+		A1B2C3D4E5F60001DDEEFF01 /* ProManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProManager.swift"; sourceTree = "<group>"; };
+		A1B2C3D4E5F60002DDEEFF02 /* ExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExportService.swift"; sourceTree = "<group>"; };
+		A1B2C3D4E5F60003DDEEFF03 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HapticManager.swift"; path = "SarkiSozu/Utils/HapticManager.swift"; sourceTree = "SOURCE_ROOT"; };
+		A1B2C3D4E5F60004DDEEFF04 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PaywallView.swift"; sourceTree = "<group>"; };
+		A1B2C3D4E5F60006DDEEFF06 /* RecordingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecordingManager.swift"; sourceTree = "<group>"; };
+		A1B2C3D4E5F60007DDEEFF07 /* SongRecordingSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SongRecordingSheet.swift"; sourceTree = "<group>"; };
+		A1B2C3D4E5F60008DDEEFF08 /* StreamingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StreamingService.swift"; sourceTree = "<group>"; };
+		A1B2C3D4E5F60009DDEEFF09 /* CustomChordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomChordStore.swift"; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000ADDEEFF0A /* ChordEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChordEditorView.swift"; sourceTree = "<group>"; };
+		A1B2C3D4E5F6000BDDEEFF0B /* SyncManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SyncManager.swift"; sourceTree = "<group>"; };
+		A1B2C3D4E5F60005DDEEFF05 /* Products.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Products.storekit"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -205,6 +226,12 @@
 			isa = PBXGroup;
 			children = (
 				FDB2CCAB497576A5E04134D2,
+				A1B2C3D4E5F60001DDEEFF01 /* ProManager.swift */,
+				A1B2C3D4E5F60002DDEEFF02 /* ExportService.swift */,
+				A1B2C3D4E5F60006DDEEFF06 /* RecordingManager.swift */,
+				A1B2C3D4E5F60008DDEEFF08 /* StreamingService.swift */,
+				A1B2C3D4E5F60009DDEEFF09 /* CustomChordStore.swift */,
+				A1B2C3D4E5F6000BDDEEFF0B /* SyncManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -231,6 +258,10 @@
 				BE23A2B487257A639348D2E6,
 				23F879292E9F32C08A30403E,
 				2A56D514F9D1975AF688E75A,
+				A1B2C3D4E5F60004DDEEFF04 /* PaywallView.swift */,
+				A1B2C3D4E5F60003DDEEFF03 /* HapticManager.swift */,
+				A1B2C3D4E5F60007DDEEFF07 /* SongRecordingSheet.swift */,
+				A1B2C3D4E5F6000ADDEEFF0A /* ChordEditorView.swift */,
 				508B330CCDE923938D8FFB64,
 			);
 			path = Views;
@@ -249,6 +280,7 @@
 			isa = PBXGroup;
 			children = (
 				7E4135FC61FB75048A50F91C,
+				A1B2C3D4E5F60005DDEEFF05 /* Products.storekit */,
 				D078B526EA54D7B549A914D0,
 			);
 			path = Resources;
@@ -372,6 +404,16 @@
 				AA11BB22CC33DD44EE55FF01 /* MetronomeView.swift in Sources */,
 				AA11BB22CC33DD44EE55FF02 /* TunerView.swift in Sources */,
 				AA11BB22CC33DD44EE55FF03 /* ChordDetectorView.swift in Sources */,
+				A1B2C3D4E5F60001AABBCC01 /* ProManager.swift in Sources */,
+				A1B2C3D4E5F60002AABBCC02 /* ExportService.swift in Sources */,
+				A1B2C3D4E5F60003AABBCC03 /* HapticManager.swift in Sources */,
+				A1B2C3D4E5F60004AABBCC04 /* PaywallView.swift in Sources */,
+				A1B2C3D4E5F60006AABBCC06 /* RecordingManager.swift in Sources */,
+				A1B2C3D4E5F60007AABBCC07 /* SongRecordingSheet.swift in Sources */,
+				A1B2C3D4E5F60008AABBCC08 /* StreamingService.swift in Sources */,
+				A1B2C3D4E5F60009AABBCC09 /* CustomChordStore.swift in Sources */,
+				A1B2C3D4E5F6000AAABBCC0A /* ChordEditorView.swift in Sources */,
+				A1B2C3D4E5F6000BAABBCC0B /* SyncManager.swift in Sources */,
 				D27C0FD09FB6FABB04A7D33F,
 				54F1B4987E023E0D67B3BB55,
 				9F3C7DC5C4DB403E10C4B5C0,
@@ -516,7 +558,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Akort aleti ve akor tespiti için mikrofon erişimi gereklidir.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Akort aleti, akor tespiti ve ses kaydı için mikrofon erişimi gereklidir.";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -542,7 +584,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Akort aleti ve akor tespiti için mikrofon erişimi gereklidir.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Akort aleti, akor tespiti ve ses kaydı için mikrofon erişimi gereklidir.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

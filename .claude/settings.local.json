@@ -3,7 +3,12 @@
     "allow": [
       "Bash(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer /Applications/Xcode.app/Contents/Developer/usr/bin/simctl terminate booted com.sarkisozu.app)",
       "Bash(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer /Applications/Xcode.app/Contents/Developer/usr/bin/simctl install booted \"/Users/parzi/Library/Developer/Xcode/DerivedData/SarkiSozu-hdonkcdhceoxohcnbkumpxjsqruz/Build/Products/Debug-iphonesimulator/SarkiSozu.app\")",
-      "Bash(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer /Applications/Xcode.app/Contents/Developer/usr/bin/simctl launch booted com.sarkisozu.app)"
+      "Bash(DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer /Applications/Xcode.app/Contents/Developer/usr/bin/simctl launch booted com.sarkisozu.app)",
+      "Bash(xcodebuild -project SarkiSozu.xcodeproj -scheme SarkiSozu -destination 'generic/platform=iOS Simulator' -sdk iphonesimulator build)",
+      "Bash(xcodebuild -project SarkiSozu.xcodeproj -scheme SarkiSozu -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 17' build)",
+      "Bash(xcrun simctl *)",
+      "Bash(open -a Simulator --args -CurrentDeviceUDID 7DFD26EA-1676-4351-A52B-FCF476DC9578)",
+      "Bash(git add *)"
     ]
   }
 }

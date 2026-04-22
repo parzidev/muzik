@@ -3,9 +3,12 @@ import SwiftUI
 // MARK: - Favorites View
 struct FavoritesView: View {
     @EnvironmentObject var dataService: SongDataService
+    @EnvironmentObject var pro: ProManager
     @State private var selectedSegment = 0 // 0: Sarklar, 1: Listeler
     @State private var showNewPlaylistAlert = false
     @State private var newPlaylistName = ""
+    @State private var showPaywall = false
+    @State private var paywallFeature: ProGate.Feature? = nil
 
     var favoriteSongs: [Song] {
         dataService.favoriteSongs()
@@ -105,8 +108,23 @@ struct FavoritesView: View {
         .toolbar {
             if selectedSegment == 1 {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: { showNewPlaylistAlert = true }) {
-                        Image(systemName: "plus")
+                    Button(action: {
+                        HapticManager.tap()
+                        if dataService.canCreatePlaylist() {
+                            showNewPlaylistAlert = true
+                        } else {
+                            paywallFeature = .playlistsLimit
+                            showPaywall = true
+                        }
+                    }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "plus")
+                            if !pro.hasProAccess && dataService.playlists.count >= ProGate.freePlaylistsLimit {
+                                Image(systemName: "crown.fill")
+                                    .font(.caption2)
+                                    .foregroundColor(.orange)
+                            }
+                        }
                     }
                 }
             }
@@ -116,12 +134,18 @@ struct FavoritesView: View {
             Button("Olustur") {
                 let name = newPlaylistName.trimmingCharacters(in: .whitespaces)
                 if !name.isEmpty {
-                    dataService.createPlaylist(name: name)
+                    if dataService.tryCreatePlaylist(name: name) {
+                        HapticManager.success()
+                    } else {
+                        paywallFeature = .playlistsLimit
+                        showPaywall = true
+                    }
                     newPlaylistName = ""
                 }
             }
             Button("Iptal", role: .cancel) { newPlaylistName = "" }
         }
+        .paywallSheet(isPresented: $showPaywall, feature: paywallFeature)
         .background(Color(uiColor: .systemGroupedBackground))
     }
 }

@@ -61,6 +61,10 @@ struct ChordDatabase {
     ]
 
     static func lookup(_ name: String) -> ChordData? {
+        // Custom user-defined chords take precedence
+        if let custom = MainActor.assumeIsolated({ CustomChordStore.shared.lookup(name) }) {
+            return custom.toChordData()
+        }
         if let data = chords[name] { return data }
         // Try without trailing numbers (e.g., "Am7" -> "Am")
         let base = name.replacingOccurrences(of: "[0-9]+$", with: "", options: .regularExpression)

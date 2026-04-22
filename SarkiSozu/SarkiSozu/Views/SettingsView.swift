@@ -3,14 +3,70 @@ import SwiftUI
 // MARK: - Settings View
 struct SettingsView: View {
     @EnvironmentObject var dataService: SongDataService
+    @EnvironmentObject var pro: ProManager
+    @EnvironmentObject var syncManager: SyncManager
     @StateObject private var viewModel = SettingsViewModel()
-    
+    @AppStorage("hapticsEnabled") private var hapticsEnabled: Bool = true
+
     // Sheet states
     @State private var showAbout = false
     @State private var showFeedback = false
-    
+    @State private var showPaywall = false
+
     var body: some View {
         Form {
+            // MARK: Pro Banner
+            Section {
+                if pro.hasProAccess {
+                    HStack(spacing: DS.Spacing.m) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: DS.CornerRadius.small)
+                                .fill(DS.Color.accentGradient)
+                                .frame(width: 44, height: 44)
+                            Image(systemName: "crown.fill")
+                                .foregroundColor(.white)
+                        }
+                        VStack(alignment: .leading, spacing: 2) {
+                            HStack(spacing: 6) {
+                                Text("SarkıSözÜ Pro")
+                                    .font(.headline)
+                                ProBadge()
+                            }
+                            Text("Tüm özellikler aktif. Teşekkürler!")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                } else {
+                    Button {
+                        HapticManager.tap()
+                        showPaywall = true
+                    } label: {
+                        HStack(spacing: DS.Spacing.m) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: DS.CornerRadius.small)
+                                    .fill(DS.Color.accentGradient)
+                                    .frame(width: 44, height: 44)
+                                Image(systemName: "crown.fill")
+                                    .foregroundColor(.white)
+                            }
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Pro'ya Geç")
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+                                Text("PDF export, sınırsız liste, iCloud sync")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+            }
+
             Section("Görünüm") {
                 // Dark Mode Toggle
                 Toggle(isOn: $viewModel.darkMode) {
@@ -61,6 +117,22 @@ struct SettingsView: View {
                     .listRowBackground(Color.clear)
             }
             
+            Section("Dokunsal Geri Bildirim") {
+                Toggle(isOn: $hapticsEnabled) {
+                    Label {
+                        Text("Titreşim").foregroundColor(DS.Color.textPrimary)
+                    } icon: {
+                        Image(systemName: "iphone.radiowaves.left.and.right").foregroundColor(DS.Color.accent)
+                    }
+                }
+                .tint(DS.Color.accent)
+                .onChange(of: hapticsEnabled) { _, newValue in
+                    if newValue { HapticManager.tap() }
+                }
+            }
+
+            iCloudSection
+
             Section("Otomatik Kaydırma") {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
@@ -168,12 +240,70 @@ struct SettingsView: View {
         .sheet(isPresented: $showFeedback) {
             FeedbackView()
         }
+        .sheet(isPresented: $showPaywall) {
+            PaywallView()
+        }
         .onAppear {
             // Sync initial state if needed
             viewModel.fontSize = Double(dataService.fontSize)
             viewModel.darkMode = dataService.darkMode
             viewModel.scrollSpeed = Double(dataService.scrollSpeed)
         }
+    }
+
+    // MARK: - iCloud Section
+
+    @ViewBuilder
+    private var iCloudSection: some View {
+        Section {
+            Toggle(isOn: Binding(
+                get: { syncManager.iCloudEnabled },
+                set: { syncManager.setEnabled($0) }
+            )) {
+                Label {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("iCloud Senkronizasyonu").foregroundColor(DS.Color.textPrimary)
+                        Text("Favoriler, listeler, notlar ve özel akorlar cihazlar arası senkronize olur.")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    }
+                } icon: {
+                    Image(systemName: "icloud.fill").foregroundColor(.blue)
+                }
+            }
+            .tint(DS.Color.accent)
+
+            if syncManager.iCloudEnabled {
+                HStack {
+                    Button {
+                        HapticManager.tap()
+                        syncManager.pullAll()
+                    } label: {
+                        Label("Şimdi Senkronize Et", systemImage: "arrow.triangle.2.circlepath")
+                    }
+                    Spacer()
+                    if syncManager.isSyncing {
+                        ProgressView()
+                    } else if let d = syncManager.lastSyncDate {
+                        Text(relativeTimeString(d))
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+        } header: {
+            Text("Bulut")
+        } footer: {
+            if syncManager.iCloudEnabled {
+                Text("iCloud hesabında oturum açık olmalı. Kayıtlar (ses dosyaları) eşitlenmez.")
+            }
+        }
+    }
+
+    private func relativeTimeString(_ date: Date) -> String {
+        let fmt = RelativeDateTimeFormatter()
+        fmt.unitsStyle = .short
+        return fmt.localizedString(for: date, relativeTo: Date())
     }
 }
 
