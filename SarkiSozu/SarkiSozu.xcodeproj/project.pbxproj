@@ -19,7 +19,6 @@
 		F98810E9EEDE47388B8C71E9 /* SongsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B74C32FF17744E18724AA9B /* SongsView.swift */; };
 		08B8BDE736574CF5BA0B4AC2 /* PlaylistsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBD0D8104BA4C22A7D93807 /* PlaylistsView.swift */; };
 		BF28B236A1F4470D87D10164 /* ChordLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6AE3E9249C4F4B97E2DBAC /* ChordLibraryView.swift */; };
-		AABB1122CCDD3344EEFF5566 /* PlaylistDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5566EEFFDDCC3344BBAA1122 /* PlaylistDetailView.swift */; };
 		D27C0FD09FB6FABB04A7D33F = {isa = PBXBuildFile; fileRef = BE23A2B487257A639348D2E6; };
 		54F1B4987E023E0D67B3BB55 = {isa = PBXBuildFile; fileRef = 23F879292E9F32C08A30403E; };
 		9F3C7DC5C4DB403E10C4B5C0 = {isa = PBXBuildFile; fileRef = 2A56D514F9D1975AF688E75A; };
@@ -64,6 +63,7 @@
 		AA646A5AC22406B122948E5F = {isa = PBXBuildFile; fileRef = 38875EFE5F7EE759D5F28F40; };
 		0373D00C89A813F0B6DDA245 = {isa = PBXBuildFile; fileRef = 2DCFD25DE226BC71CD806574; };
 		AA11BB22CC33DD44EE55FF66 = {isa = PBXBuildFile; fileRef = FF66EE55DD44CC33BB22AA11; };
+		BB22BB22BB22BB22BB22BB22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA11AA11AA11AA11AA11AA11 /* Assets.xcassets */; };
 		8A137BEC74054D048275B6AC /* A.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6CFB11E0FA5242FC9B287EBC /* A.svg */; };
 		9C690E8B4A684769B0555470 /* A7.svg in Resources */ = {isa = PBXBuildFile; fileRef = DD39E9CA48984B3AA53E47A6 /* A7.svg */; };
 		5715AC0ED11846B0ABD087C4 /* Am.svg in Resources */ = {isa = PBXBuildFile; fileRef = FCDCAD6C90944E1286ACC87E /* Am.svg */; };
@@ -100,7 +100,6 @@
 		0B74C32FF17744E18724AA9B /* SongsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SongsView.swift"; sourceTree = "<group>"; };
 		DCBD0D8104BA4C22A7D93807 /* PlaylistsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlaylistsView.swift"; sourceTree = "<group>"; };
 		2C6AE3E9249C4F4B97E2DBAC /* ChordLibraryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChordLibraryView.swift"; sourceTree = "<group>"; };
-		5566EEFFDDCC3344BBAA1122 /* PlaylistDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlaylistDetailView.swift"; sourceTree = "<group>"; };
 		BE23A2B487257A639348D2E6 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchView.swift"; sourceTree = "<group>"; };
 		23F879292E9F32C08A30403E = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsView.swift"; sourceTree = "<group>"; };
 		2A56D514F9D1975AF688E75A = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SongDetailView.swift"; sourceTree = "<group>"; };
@@ -109,6 +108,7 @@
 		FDB2CCAB497576A5E04134D2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SongDataService.swift"; sourceTree = "<group>"; };
 		7E4135FC61FB75048A50F91C = {isa = PBXFileReference; lastKnownFileType = text.json; path = "cleaned_songs.json"; sourceTree = "<group>"; };
 		FF66EE55DD44CC33BB22AA11 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Theme.swift"; sourceTree = "<group>"; };
+		AA11AA11AA11AA11AA11AA11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets.xcassets"; sourceTree = "<group>"; };
 		6CFB11E0FA5242FC9B287EBC /* A.svg */ = {isa = PBXFileReference; lastKnownFileType = text; name = "A.svg"; path = "SarkiSozu/Resources/ChordSVGs/A.svg"; sourceTree = "SOURCE_ROOT"; };
 		DD39E9CA48984B3AA53E47A6 /* A7.svg */ = {isa = PBXFileReference; lastKnownFileType = text; name = "A7.svg"; path = "SarkiSozu/Resources/ChordSVGs/A7.svg"; sourceTree = "SOURCE_ROOT"; };
 		FCDCAD6C90944E1286ACC87E /* Am.svg */ = {isa = PBXFileReference; lastKnownFileType = text; name = "Am.svg"; path = "SarkiSozu/Resources/ChordSVGs/Am.svg"; sourceTree = "SOURCE_ROOT"; };
@@ -171,6 +171,7 @@
 				95DF61116CBC7317336DBE03,
 				78EF4B0EA3FDA2A792BCF074,
 				0ECEC165EE4DFB177DC80E73,
+				AA11AA11AA11AA11AA11AA11 /* Assets.xcassets */,
 			);
 			path = SarkiSozu;
 			sourceTree = "<group>";
@@ -200,7 +201,6 @@
 				0B74C32FF17744E18724AA9B /* SongsView.swift */,
 				DCBD0D8104BA4C22A7D93807 /* PlaylistsView.swift */,
 				2C6AE3E9249C4F4B97E2DBAC /* ChordLibraryView.swift */,
-				5566EEFFDDCC3344BBAA1122 /* PlaylistDetailView.swift */,
 				BE23A2B487257A639348D2E6,
 				23F879292E9F32C08A30403E,
 				2A56D514F9D1975AF688E75A,
@@ -335,7 +335,6 @@
 				F98810E9EEDE47388B8C71E9 /* SongsView.swift in Sources */,
 				08B8BDE736574CF5BA0B4AC2 /* PlaylistsView.swift in Sources */,
 				BF28B236A1F4470D87D10164 /* ChordLibraryView.swift in Sources */,
-				AABB1122CCDD3344EEFF5566 /* PlaylistDetailView.swift in Sources */,
 				D27C0FD09FB6FABB04A7D33F,
 				54F1B4987E023E0D67B3BB55,
 				9F3C7DC5C4DB403E10C4B5C0,
@@ -410,6 +409,7 @@
 				996137BDD2B79008D0207742,
 				AA646A5AC22406B122948E5F,
 				0373D00C89A813F0B6DDA245,
+				BB22BB22BB22BB22BB22BB22 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -476,7 +476,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = YYNX4CG4LH;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -501,9 +501,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = YYNX4CG4LH;
+				PROVISIONING_PROFILE_SPECIFIER = "SarkiSozu Distribution";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
