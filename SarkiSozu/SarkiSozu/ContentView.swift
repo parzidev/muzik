@@ -11,6 +11,21 @@ struct ContentView: View {
     }
     
     var body: some View {
+        rootLayout
+            .alert(item: $dataService.loadError) { error in
+                Alert(
+                    title: Text(error.title),
+                    message: Text(error.message),
+                    primaryButton: .default(Text("Tekrar Dene")) {
+                        dataService.loadSongs()
+                    },
+                    secondaryButton: .cancel(Text("Tamam"))
+                )
+            }
+    }
+
+    @ViewBuilder
+    private var rootLayout: some View {
         #if os(iOS)
         if UIDevice.current.userInterfaceIdiom == .pad {
             iPadLayout

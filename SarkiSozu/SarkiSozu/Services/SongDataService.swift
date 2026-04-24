@@ -9,6 +9,40 @@ class SongDataService: ObservableObject {
     @Published var recentlyViewed: [Int] = []
     @Published var playlists: [Playlist] = []
     @Published var isLoading = true
+    @Published var loadError: LoadError?
+
+    enum LoadError: Identifiable {
+        case fileNotFound
+        case readFailed(String)
+        case emptyResult
+
+        var id: String {
+            switch self {
+            case .fileNotFound: return "fileNotFound"
+            case .readFailed: return "readFailed"
+            case .emptyResult: return "emptyResult"
+            }
+        }
+
+        var title: String {
+            switch self {
+            case .fileNotFound: return "Şarkı verisi bulunamadı"
+            case .readFailed: return "Şarkılar yüklenemedi"
+            case .emptyResult: return "Hiç şarkı okunamadı"
+            }
+        }
+
+        var message: String {
+            switch self {
+            case .fileNotFound:
+                return "Şarkı dosyası uygulama paketi içinde yok. Lütfen yeniden yükleyin."
+            case .readFailed(let detail):
+                return "Şarkı dosyası okunurken bir sorun oldu.\n\(detail)"
+            case .emptyResult:
+                return "Şarkı dosyası açıldı ama içinden hiç geçerli kayıt çıkmadı."
+            }
+        }
+    }
 
     @AppStorage("darkMode") var darkMode = false
     @AppStorage("fontSize") var fontSize: Int = 16
@@ -40,6 +74,7 @@ class SongDataService: ObservableObject {
                 NSLog("SongDataService: CRITICAL ERROR - Could not find cleaned_songs.json in Bundle!")
                 DispatchQueue.main.async {
                     self?.isLoading = false
+                    self?.loadError = .fileNotFound
                 }
                 return
             }
@@ -53,6 +88,7 @@ class SongDataService: ObservableObject {
                     NSLog("SongDataService: Failed to convert data to UTF-8 string")
                     DispatchQueue.main.async {
                         self?.isLoading = false
+                        self?.loadError = .readFailed("UTF-8 dönüşümü başarısız.")
                     }
                     return
                 }
@@ -83,11 +119,15 @@ class SongDataService: ObservableObject {
                 DispatchQueue.main.async {
                     self?.songs = loadedSongs.sorted { $0.sarkiadi < $1.sarkiadi }
                     self?.isLoading = false
+                    if loadedSongs.isEmpty {
+                        self?.loadError = .emptyResult
+                    }
                 }
             } catch {
                 NSLog("SongDataService: Failed to read file: \(error.localizedDescription)")
                 DispatchQueue.main.async {
                     self?.isLoading = false
+                    self?.loadError = .readFailed(error.localizedDescription)
                 }
             }
         }
