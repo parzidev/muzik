@@ -102,7 +102,7 @@ struct SettingsView: View {
                         Image(systemName: "info.circle").foregroundColor(DS.Color.accent)
                     }
                 }
-                
+
                 Button {
                     showFeedback = true
                 } label: {
@@ -112,7 +112,15 @@ struct SettingsView: View {
                         Image(systemName: "envelope").foregroundColor(DS.Color.accent)
                     }
                 }
-                
+
+                NavigationLink(destination: DiagnosticsView()) {
+                    Label {
+                        Text("Tanı Raporları").foregroundColor(DS.Color.textPrimary)
+                    } icon: {
+                        Image(systemName: "stethoscope").foregroundColor(DS.Color.accent)
+                    }
+                }
+
                 // Version
                 HStack {
                     Label {
@@ -142,6 +150,88 @@ struct SettingsView: View {
     }
 }
 
+// MARK: - Diagnostics View
+
+struct DiagnosticsView: View {
+    @State private var reports: [URL] = []
+
+    private static let displayDateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateStyle = .medium
+        f.timeStyle = .short
+        return f
+    }()
+
+    var body: some View {
+        List {
+            Section {
+                Text("Bu raporlar Apple'ın MetricKit servisi aracılığıyla cihazda toplanır ve yalnızca burada saklanır. Hata veya performans verisini geliştirici ile paylaşmak için aşağıdaki raporlardan birini açıp paylaş simgesini kullanın.")
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+            }
+
+            if reports.isEmpty {
+                Section {
+                    Text("Henüz rapor yok. MetricKit raporları günde bir kere veya bir hata sonrası gelir.")
+                        .foregroundColor(.secondary)
+                        .padding(.vertical, DS.Spacing.s)
+                }
+            } else {
+                Section("Raporlar") {
+                    ForEach(reports, id: \.self) { url in
+                        ShareLink(item: url) {
+                            HStack {
+                                Image(systemName: url.lastPathComponent.hasPrefix("diagnostic") ? "exclamationmark.triangle" : "chart.bar")
+                                    .foregroundColor(DS.Color.accent)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(displayName(for: url))
+                                        .font(.body)
+                                        .foregroundColor(DS.Color.textPrimary)
+                                    Text(creationDateString(for: url))
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                Spacer()
+                                Image(systemName: "square.and.arrow.up")
+                                    .foregroundColor(.secondary)
+                                    .accessibilityHidden(true)
+                            }
+                        }
+                        .accessibilityLabel("\(displayName(for: url)) raporu, \(creationDateString(for: url)), paylaş")
+                    }
+                    .onDelete(perform: deleteReports)
+                }
+            }
+        }
+        .navigationTitle("Tanı Raporları")
+        .onAppear { reports = MetricsService.shared.savedReports() }
+        .toolbar {
+            if !reports.isEmpty {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    EditButton()
+                }
+            }
+        }
+    }
+
+    private func deleteReports(at offsets: IndexSet) {
+        let toRemove = offsets.map { reports[$0] }
+        for url in toRemove {
+            try? FileManager.default.removeItem(at: url)
+        }
+        reports = MetricsService.shared.savedReports()
+    }
+
+    private func displayName(for url: URL) -> String {
+        url.lastPathComponent.hasPrefix("diagnostic") ? "Tanı (hata/donma)" : "Performans"
+    }
+
+    private func creationDateString(for url: URL) -> String {
+        let date = (try? url.resourceValues(forKeys: [.creationDateKey]).creationDate) ?? Date()
+        return Self.displayDateFormatter.string(from: date)
+    }
+}
+
 // MARK: - About View
 struct AboutView: View {
     @Environment(\.dismiss) var dismiss
@@ -161,6 +251,7 @@ struct AboutView: View {
                     }
                     .padding(.top, DS.Spacing.xl)
                     .shadow(color: DS.Shadow.medium.color, radius: DS.Shadow.medium.radius, x: 0, y: 4)
+                    .accessibilityHidden(true)
 
                     VStack(spacing: 4) {
                         DS.Typography.title1("ŞarkıSözÜ")

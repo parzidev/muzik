@@ -20,6 +20,7 @@
 		08B8BDE736574CF5BA0B4AC2 /* PlaylistsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBD0D8104BA4C22A7D93807 /* PlaylistsView.swift */; };
 		BF28B236A1F4470D87D10164 /* ChordLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6AE3E9249C4F4B97E2DBAC /* ChordLibraryView.swift */; };
 		A1B2C3D4E5F60718293A4B5C /* PlaylistDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B5D /* PlaylistDetailView.swift */; };
+		A1B2C3D4E5F60718293A4B5E /* MetricsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B5F /* MetricsService.swift */; };
 		D27C0FD09FB6FABB04A7D33F = {isa = PBXBuildFile; fileRef = BE23A2B487257A639348D2E6; };
 		54F1B4987E023E0D67B3BB55 = {isa = PBXBuildFile; fileRef = 23F879292E9F32C08A30403E; };
 		9F3C7DC5C4DB403E10C4B5C0 = {isa = PBXBuildFile; fileRef = 2A56D514F9D1975AF688E75A; };
@@ -103,6 +104,7 @@
 		DCBD0D8104BA4C22A7D93807 /* PlaylistsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlaylistsView.swift"; sourceTree = "<group>"; };
 		2C6AE3E9249C4F4B97E2DBAC /* ChordLibraryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChordLibraryView.swift"; sourceTree = "<group>"; };
 		A1B2C3D4E5F60718293A4B5D /* PlaylistDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlaylistDetailView.swift"; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A4B5F /* MetricsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MetricsService.swift"; sourceTree = "<group>"; };
 		BE23A2B487257A639348D2E6 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchView.swift"; sourceTree = "<group>"; };
 		23F879292E9F32C08A30403E = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsView.swift"; sourceTree = "<group>"; };
 		2A56D514F9D1975AF688E75A = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SongDetailView.swift"; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 			isa = PBXGroup;
 			children = (
 				FDB2CCAB497576A5E04134D2,
+				A1B2C3D4E5F60718293A4B5F /* MetricsService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -403,6 +406,7 @@
 				08B8BDE736574CF5BA0B4AC2 /* PlaylistsView.swift in Sources */,
 				BF28B236A1F4470D87D10164 /* ChordLibraryView.swift in Sources */,
 				A1B2C3D4E5F60718293A4B5C /* PlaylistDetailView.swift in Sources */,
+				A1B2C3D4E5F60718293A4B5E /* MetricsService.swift in Sources */,
 				D27C0FD09FB6FABB04A7D33F,
 				54F1B4987E023E0D67B3BB55,
 				9F3C7DC5C4DB403E10C4B5C0,

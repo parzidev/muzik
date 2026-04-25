@@ -4,6 +4,10 @@ import SwiftUI
 struct SarkiSozuApp: App {
     @StateObject private var dataService = SongDataService.shared
 
+    init() {
+        MetricsService.shared.start()
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
