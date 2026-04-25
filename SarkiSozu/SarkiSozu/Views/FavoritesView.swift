@@ -76,6 +76,7 @@ struct FavoritesView: View {
                                                 .foregroundColor(.white)
                                                 .font(.system(size: 18))
                                         )
+                                        .accessibilityHidden(true)
 
                                     VStack(alignment: .leading, spacing: 2) {
                                         Text(playlist.name)
@@ -87,6 +88,8 @@ struct FavoritesView: View {
                                     }
                                 }
                                 .padding(.vertical, DS.Spacing.xxs)
+                                .accessibilityElement(children: .combine)
+                                .accessibilityLabel("\(playlist.name), \(playlist.songIds.count) şarkı")
                             }
                             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                 Button(role: .destructive) {
@@ -108,6 +111,7 @@ struct FavoritesView: View {
                     Button(action: { showNewPlaylistAlert = true }) {
                         Image(systemName: "plus")
                     }
+                    .accessibilityLabel("Yeni liste oluştur")
                 }
             }
         }

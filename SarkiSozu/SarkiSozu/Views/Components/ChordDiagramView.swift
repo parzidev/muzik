@@ -119,6 +119,8 @@ struct ChordDiagramView: View {
         .padding(8)
         .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(DS.CornerRadius.medium)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(chordName) akor diyagramı")
     }
 }
 

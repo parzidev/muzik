@@ -13,6 +13,7 @@ struct SongRowView: View {
                     .fontWeight(.semibold)
                     .foregroundColor(.secondary)
                     .frame(width: 24)
+                    .accessibilityHidden(true)
             }
 
             // Music icon
@@ -23,6 +24,7 @@ struct SongRowView: View {
                     Image(systemName: "music.note")
                         .foregroundColor(.white.opacity(0.8))
                 )
+                .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(song.sarkiadi)
@@ -49,6 +51,21 @@ struct SongRowView: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 8) // Reduced vertical padding for tighter list
         .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(accessibilityDescription)
+    }
+
+    private var accessibilityDescription: String {
+        var parts: [String] = []
+        if let index = index { parts.append("Sıra \(index)") }
+        parts.append(song.sarkiadi)
+        parts.append("Sanatçı: \(song.sanatci)")
+        if let ton = song.orjinal_ton, !ton.isEmpty {
+            parts.append("Ton: \(ton)")
+        } else if let firstChord = song.chords.first, !firstChord.isEmpty {
+            parts.append("Akor: \(firstChord)")
+        }
+        return parts.joined(separator: ", ")
     }
     
     private func keyBadge(text: String) -> some View {

@@ -21,6 +21,7 @@ struct PlaylistsView: View {
                 Button(action: { showNewPlaylistAlert = true }) {
                     Image(systemName: "plus")
                 }
+                .accessibilityLabel("Yeni liste oluştur")
             }
         }
         .alert("Yeni Liste", isPresented: $showNewPlaylistAlert) {
@@ -103,6 +104,7 @@ struct PlaylistsView: View {
                         .foregroundColor(.white)
                         .font(.system(size: 18))
                 )
+                .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(playlist.name)
@@ -118,5 +120,7 @@ struct PlaylistsView: View {
         }
         .padding(.vertical, DS.Spacing.xxs)
         .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(playlist.name), \(playlist.songIds.count) şarkı")
     }
 }

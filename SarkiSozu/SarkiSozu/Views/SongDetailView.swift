@@ -6,6 +6,18 @@ struct SongDetailView: View {
     @Environment(\.dismiss) var dismiss
     @State private var showAddToPlaylist = false
 
+    @AppStorage("fontSize") private var userFontSize: Int = 16
+
+    private var lyricsFont: Font {
+        .system(size: CGFloat(userFontSize))
+    }
+    private var chordFont: Font {
+        .system(size: CGFloat(userFontSize), weight: .bold, design: .monospaced)
+    }
+    private var chordSpaceFont: Font {
+        .system(size: CGFloat(userFontSize), design: .monospaced)
+    }
+
     // Auto-scroll state
     @Namespace private var topID
     @Namespace private var bottomID
@@ -64,10 +76,12 @@ struct SongDetailView: View {
                             .font(.system(size: 17, weight: .semibold))
                             .foregroundColor(.primary)
                     }
+                    .accessibilityLabel("Geri")
                 }
                 ToolbarItem(placement: .principal) {
                     Text(viewModel.song.sarkiadi)
                         .font(.headline)
+                        .accessibilityAddTraits(.isHeader)
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack(spacing: 16) {
@@ -75,12 +89,14 @@ struct SongDetailView: View {
                             Image(systemName: "text.badge.plus")
                                 .foregroundColor(.primary)
                         }
+                        .accessibilityLabel("Çalma listesine ekle")
                         Button(action: {
                             dataService.toggleFavorite(viewModel.song.id)
                         }) {
                             Image(systemName: dataService.isFavorite(viewModel.song.id) ? "heart.fill" : "heart")
                                 .foregroundColor(dataService.isFavorite(viewModel.song.id) ? .red : .primary)
                         }
+                        .accessibilityLabel(dataService.isFavorite(viewModel.song.id) ? "Favorilerden çıkar" : "Favorilere ekle")
                     }
                 }
             }
@@ -288,7 +304,7 @@ struct SongDetailView: View {
                     let lyricsText = lyric.type == .block ? lyric.lyrics : lyric.content
                     if let lyricsStr = lyricsText, !lyricsStr.isEmpty {
                         Text(lyricsStr)
-                            .font(.system(size: 15))
+                            .font(lyricsFont)
                             .foregroundColor(.primary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
@@ -304,15 +320,16 @@ struct SongDetailView: View {
             ForEach(Array(parts.enumerated()), id: \.offset) { _, part in
                 if part.isChord {
                     Text(part.text)
-                        .font(.system(size: 15, weight: .bold))
+                        .font(chordFont)
                         .foregroundColor(DS.Color.accent)
                 } else {
                     // Use a fixed-width space to maintain alignment
                     Text(String(repeating: " ", count: part.text.count))
-                        .font(.system(size: 15))
+                        .font(chordSpaceFont)
                 }
             }
         }
+        .accessibilityLabel("Akorlar: \(parts.filter { $0.isChord }.map { $0.text }.joined(separator: ", "))")
     }
 
     private struct ChordPart {
@@ -427,26 +444,45 @@ struct ControlStepper<T: Numeric & Comparable & Strideable>: View {
             Text(title)
                 .font(.caption)
                 .foregroundColor(.secondary)
-            
+                .accessibilityHidden(true)
+
             HStack(spacing: 0) {
                 Button(action: { if value > range.lowerBound { value -= 1 } }) {
                     Image(systemName: "minus")
-                        .frame(width: 32, height: 32)
+                        .frame(width: 44, height: 44)
                         .background(Color(uiColor: .secondarySystemBackground))
                 }
-                
+                .accessibilityLabel("\(title) azalt")
+                .disabled(value <= range.lowerBound)
+
                 Text(display(value))
                     .font(.headline)
-                    .frame(width: 40)
+                    .frame(width: 44)
                     .multilineTextAlignment(.center)
-                
+                    .accessibilityHidden(true)
+
                 Button(action: { if value < range.upperBound { value += 1 } }) {
                     Image(systemName: "plus")
-                        .frame(width: 32, height: 32)
+                        .frame(width: 44, height: 44)
                         .background(Color(uiColor: .secondarySystemBackground))
                 }
+                .accessibilityLabel("\(title) arttır")
+                .disabled(value >= range.upperBound)
             }
             .cornerRadius(8)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(title)
+        .accessibilityValue(display(value))
+        .accessibilityAdjustableAction { direction in
+            switch direction {
+            case .increment:
+                if value < range.upperBound { value += 1 }
+            case .decrement:
+                if value > range.lowerBound { value -= 1 }
+            @unknown default:
+                break
+            }
         }
     }
 }

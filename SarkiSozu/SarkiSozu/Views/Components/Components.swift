@@ -13,13 +13,14 @@ struct SongCardView: View {
                 RoundedRectangle(cornerRadius: DS.CornerRadius.medium)
                     .fill(DS.Color.accentGradient)
                     .aspectRatio(1, contentMode: .fit)
-                
+
                 Image(systemName: "music.note")
                     .font(.system(size: 32))
                     .foregroundColor(.white)
                     .symbolEffect(.bounce, value: true)
             }
             .frame(width: 140)
+            .accessibilityHidden(true)
             
             VStack(alignment: .leading, spacing: 2) {
                 DS.Typography.headline(title)
@@ -83,9 +84,11 @@ struct EmptyStateView: View {
                 .font(.system(size: 64))
                 .foregroundColor(DS.Color.textTertiary)
                 .padding(.bottom, DS.Spacing.xs)
-            
+                .accessibilityHidden(true)
+
             DS.Typography.title3(title)
                 .foregroundColor(DS.Color.textPrimary)
+                .accessibilityAddTraits(.isHeader)
             
             DS.Typography.subheadline(message)
                 .multilineTextAlignment(.center)
