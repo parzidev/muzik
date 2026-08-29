@@ -1,0 +1,14 @@
+<svg width="120" height="160" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="120" height="160" rx="18" fill="#111826"/>
+  <text x="60.0" y="28" text-anchor="middle"
+        font-family="SF Pro Display, Inter, sans-serif"
+        font-size="18"
+        fill="#EAF0FF"
+        font-weight="600">C7</text>
+  <text x="20" y="30" text-anchor="middle" font-family="SF Pro Display, Inter, sans-serif" font-size="12" fill="#9FB0C8">x</text><circle cx="100" cy="26" r="4" stroke="#3B82F6" stroke-width="2" fill="none"/>
+  <rect x="20" y="40" width="80" height="6" fill="#EAF0FF" rx="3"/>
+  
+  <line x1="20" y1="40" x2="20" y2="140" stroke="#2A3548" stroke-width="2"/><line x1="36" y1="40" x2="36" y2="140" stroke="#2A3548" stroke-width="2"/><line x1="52" y1="40" x2="52" y2="140" stroke="#2A3548" stroke-width="2"/><line x1="68" y1="40" x2="68" y2="140" stroke="#2A3548" stroke-width="2"/><line x1="84" y1="40" x2="84" y2="140" stroke="#2A3548" stroke-width="2"/><line x1="100" y1="40" x2="100" y2="140" stroke="#2A3548" stroke-width="2"/><line x1="20" y1="60" x2="100" y2="60" stroke="#2A3548" stroke-width="2"/><line x1="20" y1="80" x2="100" y2="80" stroke="#2A3548" stroke-width="2"/><line x1="20" y1="100" x2="100" y2="100" stroke="#2A3548" stroke-width="2"/><line x1="20" y1="120" x2="100" y2="120" stroke="#2A3548" stroke-width="2"/><line x1="20" y1="140" x2="100" y2="140" stroke="#2A3548" stroke-width="2"/>
+  
+  <circle cx="36" cy="90.0" r="6" fill="#3B82F6"/><circle cx="52" cy="70.0" r="6" fill="#3B82F6"/><circle cx="68" cy="90.0" r="6" fill="#3B82F6"/><circle cx="84" cy="50.0" r="6" fill="#3B82F6"/>
+</svg>
